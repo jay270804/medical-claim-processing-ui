@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius: 0.625rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #282C33;
+  --foreground: #FFFFFF;
+  --primary: #C778DD;
+  --primary-foreground: #FFFFFF;
+  --secondary: #ABB2BF;
+  --secondary-foreground: #282C33;
+  --muted: #ABB2BF;
+  --muted-foreground: #6B7280;
+  --accent: #ABB2BF;
+  --accent-foreground: #282C33;
+  --destructive: #EF4444;
+  --border: #374151;
+  --input: #374151;
+  --ring: #6B7280;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Custom component classes */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground px-4 py-2 rounded;
+  }
+
+  .card {
+    @apply bg-background rounded p-4 border border-border;
+  }
 }

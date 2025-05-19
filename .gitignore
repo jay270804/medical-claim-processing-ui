@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.cursor
+Medical Claims Processing System API.postman_collection.json
+reference_for_css_setup
