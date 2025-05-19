@@ -13,6 +13,8 @@ import {
   ArrowUpDown,
   ChevronLeft,
   ChevronRight,
+  Inbox,
+  Upload,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,17 +42,16 @@ import {
 } from '@/components/ui/select';
 import { Toaster } from 'sonner';
 import { getAllClaims, type Claim, type GetAllClaimsParams } from '@/lib/apiService';
+import { EmptyState } from '@/components/ui/empty-state';
 
 const STATUS_COLORS = {
-  PROCESSING: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-  APPROVED: 'bg-green-500/10 text-green-500 border-green-500/20',
-  REJECTED: 'bg-red-500/10 text-red-500 border-red-500/20',
+  PROCESSED: 'bg-green-500/10 text-green-500 border-green-500/20',
+  NOT_PROCESSED: 'bg-red-500/10 text-red-500 border-red-500/20',
 };
 
 const STATUS_ICONS = {
-  PROCESSING: Clock,
-  APPROVED: CheckCircle2,
-  REJECTED: AlertCircle,
+  PROCESSED: CheckCircle2,
+  NOT_PROCESSED: AlertCircle,
 };
 
 const ITEMS_PER_PAGE = 10;
@@ -115,13 +116,6 @@ export default function DashboardPage() {
     }).format(amount);
   };
 
-  const handleViewDetails = (claimId: string) => {
-    console.log('View Details clicked for claim:', claimId);
-    console.log('Current auth token:', localStorage.getItem('authToken'));
-    const url = `/claims/${claimId}`;
-    console.log('Navigating to:', url);
-    router.push(url);
-  };
 
   return (
     <div className="space-y-6">
@@ -144,9 +138,9 @@ export default function DashboardPage() {
             </SelectTrigger>
             <SelectContent className="bg-slate-800 border-slate-700">
               <SelectItem value="ALL" className="text-white hover:bg-slate-700">All Status</SelectItem>
-              <SelectItem value="PROCESSING" className="text-white hover:bg-slate-700">Processing</SelectItem>
-              <SelectItem value="APPROVED" className="text-white hover:bg-slate-700">Approved</SelectItem>
-              <SelectItem value="REJECTED" className="text-white hover:bg-slate-700">Rejected</SelectItem>
+              <SelectItem value="PROCESSED" className="text-white hover:bg-slate-700">Processed</SelectItem>
+              <SelectItem value="NOT_PROCESSED" className="text-white hover:bg-slate-700">Not Processed</SelectItem>
+              {/* <SelectItem value="FAILED" className="text-white hover:bg-slate-700">Failed</SelectItem> */}
             </SelectContent>
           </Select>
         </div>
@@ -160,7 +154,18 @@ export default function DashboardPage() {
           {isLoading ? (
             <div className="text-slate-400">Loading claims...</div>
           ) : claims.length === 0 ? (
-            <div className="text-slate-400">No claims found.</div>
+            <EmptyState
+              icon={Inbox}
+              title="No Claims Found"
+              description={statusFilter ?
+                `No claims found with status "${statusFilter}". Try changing the filter or upload a new claim.` :
+                'Get started by uploading your first medical claim document.'}
+              action={{
+                label: "Upload Claim",
+                onClick: () => router.push('/upload'),
+                icon: Upload
+              }}
+            />
           ) : (
             <>
               <Table>

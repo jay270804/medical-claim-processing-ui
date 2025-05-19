@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Upload, FileText, AlertCircle } from 'lucide-react';
+import { Upload, FileText, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Toaster } from 'sonner';
 import { uploadDocument } from '@/lib/apiService';
 import type { DocumentType, UploadDocumentResponse } from '@/lib/apiService';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const DOCUMENT_TYPES = [
   { value: 'INVOICE', label: 'Invoice' },
@@ -33,6 +34,7 @@ export default function UploadPage() {
   const [description, setDescription] = useState<string>('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [inlineError, setInlineError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -50,11 +52,13 @@ export default function UploadPage() {
   const handleUpload = async () => {
     if (!file || !documentType) {
       toast.error('Please select a file and document type');
+      setInlineError('Please select a file and document type');
       return;
     }
 
     setIsUploading(true);
     setUploadProgress(0);
+    setInlineError(null);
 
     try {
       const formData = new FormData();
@@ -86,6 +90,7 @@ export default function UploadPage() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to upload document. Please try again.';
       toast.error(errorMessage);
+      setInlineError(errorMessage);
       console.error('Upload error:', error);
     } finally {
       setIsUploading(false);
@@ -179,9 +184,16 @@ export default function UploadPage() {
             disabled={isUploading || !file || !documentType}
             className="w-full bg-[#2f7ff2] hover:bg-[#2f7ff2]/90 text-white"
           >
-            <Upload className="mr-2 h-4 w-4" />
+            {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
             {isUploading ? 'Uploading...' : 'Upload Document'}
           </Button>
+
+          {inlineError && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{inlineError}</AlertDescription>
+            </Alert>
+          )}
 
           {/* Help Text */}
           <div className="flex items-start gap-2 text-sm text-slate-400">

@@ -2,7 +2,7 @@ import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig 
 import { useAuthStore } from '@/store/authStore';
 
 // --- Configuration ---
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.medicalclaims.example.com/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // --- Interfaces based on Postman Collection ---
 
@@ -245,14 +245,12 @@ const getAuthToken = (): string | null => {
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getAuthToken();
-    console.log('Auth token:', token ? 'Present' : 'Missing');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error: AxiosError) => {
-    console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -260,19 +258,9 @@ apiClient.interceptors.request.use(
 // Add response interceptor for debugging
 apiClient.interceptors.response.use(
   (response) => {
-    console.log('API Response:', {
-      url: response.config.url,
-      status: response.status,
-      data: response.data
-    });
     return response;
   },
   (error) => {
-    console.error('API Error:', {
-      url: error.config?.url,
-      status: error.response?.status,
-      data: error.response?.data
-    });
     return Promise.reject(error);
   }
 );
@@ -370,10 +358,8 @@ export const getAllClaims = async (params?: GetAllClaimsParams): Promise<GetAllC
 export const getClaimById = async (claimId: string): Promise<GetClaimByIdResponse> => {
   try {
     const response = await apiClient.get<GetClaimByIdResponse>(`/claims/${claimId}`);
-    console.log('API Response in getClaimById:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error in getClaimById:', error);
     if (axios.isAxiosError(error) && error.response) {
       return error.response.data as GetClaimByIdResponse;
     }

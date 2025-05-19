@@ -161,7 +161,7 @@ export default function RegisterPage() {
           <CardFooter className="flex flex-col items-stretch">
             <Button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white mt-5"
               disabled={isLoading}
             >
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Create Account'}

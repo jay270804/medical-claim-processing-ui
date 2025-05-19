@@ -20,12 +20,12 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleLogout = async () => {
     await logout();
-    router.push('/login');
+    router.push('/');
   };
 
   const navItems = [
@@ -85,6 +85,12 @@ export default function AppLayout({
           </nav>
 
           {/* Logout Button */}
+          {user?.email && (
+            <div className="px-4 pb-2 text-slate-400 text-xs truncate flex items-center gap-2" title={user?.email}>
+              <UserCircle size={16} className="text-slate-500" />
+              {user?.email}
+            </div>
+          )}
           <div className="p-4 border-t border-slate-800">
             <Button
               variant="ghost"

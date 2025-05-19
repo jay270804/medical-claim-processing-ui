@@ -1,103 +1,130 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { LogIn, UserPlus } from "lucide-react";
+import { motion } from "framer-motion";
+
+export default function LandingPage() {
+  const router = useRouter();
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen flex flex-col bg-slate-950 text-white">
+      {/* Navbar */}
+      <nav className="w-full flex justify-end items-center px-6 py-4 bg-slate-950/80 backdrop-blur z-20 sticky top-0">
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            className="bg-[#2f7ff2] text-white hover:bg-[#2563eb] font-semibold shadow"
+            onClick={() => router.push("/register")}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <UserPlus className="mr-2 h-4 w-4" /> Register
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-[#2f7ff2] text-[#2f7ff2] hover:bg-[#2f7ff2]/10 font-semibold shadow"
+            onClick={() => router.push("/login")}
           >
-            Read our docs
-          </a>
+            <LogIn className="mr-2 h-4 w-4" /> Login
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </nav>
+
+      {/* Hero Section */}
+      <motion.section
+        className="flex flex-col items-center justify-center flex-1 px-4 py-16 md:py-24"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.h1
+          className="text-4xl md:text-6xl font-extrabold text-center mb-4 text-[#2f7ff2] drop-shadow-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Medical Claims Processing System
+        </motion.h1>
+        <motion.p
+          className="text-lg md:text-2xl text-slate-300 text-center max-w-2xl mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          Streamline your healthcare claims with AI-powered automation. Secure, fast, and easy to use for providers and patients alike.
+        </motion.p>
+      </motion.section>
+
+      {/* Video Section */}
+      <motion.section
+        className="w-full flex justify-center items-center bg-transparent py-8 flex-shrink-0"
+        style={{ minHeight: "40vh" }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
+        <div className="w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-2xl border border-slate-800">
+          <motion.video
+            className="w-full h-full object-fill"
+            src="/Medical Claim Processing UI Demo.compressed.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/video-poster.png"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+      </motion.section>
+
+      {/* Features Section */}
+      <section className="flex flex-col items-center justify-center py-12 px-4 bg-slate-950 mb-5">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#2f7ff2]">Why Choose Us?</h2>
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
+          {[{
+            icon: "⚡",
+            title: "Fast Processing",
+            desc: "AI-driven claim extraction and validation for rapid turnaround."
+          }, {
+            icon: "🔒",
+            title: "Secure & Private",
+            desc: "Encrypted document storage and processing."
+          }, {
+            icon: "🩺",
+            title: "For Providers & Patients",
+            desc: "Intuitive dashboards and tools for all users, anytime, anywhere."
+          }].map((feature, i) => (
+            <motion.li
+              key={feature.title}
+              className="bg-slate-900 rounded-lg p-6 shadow border border-slate-800 flex flex-col items-center"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 32px 0 rgba(47,127,242,0.15)" }}
+              transition={{ duration: 0.5, delay: 0.2 + i * 0.15, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <span className="text-3xl mb-2">{feature.icon}</span>
+              <span className="font-semibold text-lg mb-1">{feature.title}</span>
+              <span className="text-slate-400 text-sm text-center">{feature.desc}</span>
+            </motion.li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Footer */}
+      <motion.footer
+        className="w-full bg-slate-900 border-t border-slate-800 py-4 flex flex-col items-center text-center mt-auto gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+      >
+        <span className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} Medical Claims Processing UI. All rights reserved.</span>
+        <span className="text-slate-600 text-xs mt-1">Built with <span className="text-[#2f7ff2] font-semibold">Next.js</span> &amp; <span className="text-[#2f7ff2] font-semibold">shadcn/ui</span></span>
+      </motion.footer>
     </div>
   );
 }

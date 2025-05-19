@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getClaimById, getDocumentPresignedUrl, type DetailedClaim } from '@/lib/apiService';
 import { toast, Toaster } from 'sonner';
 import { ArrowLeft, Eye, Download } from 'lucide-react';
+import { formatValue, formatCurrency, formatDate } from './utils';
 
 export default function ClaimDetailsPage() {
   const params = useParams();
@@ -174,19 +175,19 @@ export default function ClaimDetailsPage() {
                 <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Claim ID</dt>
-                    <dd className="mt-1 text-white">{claim.id}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim.id)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Status</dt>
-                    <dd className="mt-1 text-white">{claim.status}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim.status)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Created At</dt>
-                    <dd className="mt-1 text-white">{new Date(claim.createdAt).toLocaleString()}</dd>
+                    <dd className="mt-1 text-white">{formatDate(claim.createdAt)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Updated At</dt>
-                    <dd className="mt-1 text-white">{new Date(claim.updatedAt).toLocaleString()}</dd>
+                    <dd className="mt-1 text-white">{formatDate(claim.updatedAt)}</dd>
                   </div>
                 </dl>
               </AccordionContent>
@@ -198,21 +199,19 @@ export default function ClaimDetailsPage() {
                 <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Name</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.patientInfo?.name || claim?.patientName || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.patientInfo?.name || claim?.patientName)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Date of Birth</dt>
-                    <dd className="mt-1 text-white">
-                      {claim?.extractedData?.patientInfo?.dob ? new Date(claim.extractedData.patientInfo.dob).toLocaleDateString() : 'N/A'}
-                    </dd>
+                    <dd className="mt-1 text-white">{formatDate(claim?.extractedData?.patientInfo?.dob)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Gender</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.patientInfo?.gender || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.patientInfo?.gender)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Insurance ID</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.patientInfo?.insuranceId || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.patientInfo?.insuranceId)}</dd>
                   </div>
                 </dl>
               </AccordionContent>
@@ -224,15 +223,15 @@ export default function ClaimDetailsPage() {
                 <dl className="grid grid-cols-1 gap-4">
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Name</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.providerInfo?.name || claim?.providerName || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.providerInfo?.name || claim?.providerName)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Address</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.providerInfo?.address || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.providerInfo?.address)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Provider Number</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.providerInfo?.providerNumber || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.providerInfo?.providerNumber)}</dd>
                   </div>
                 </dl>
               </AccordionContent>
@@ -244,62 +243,61 @@ export default function ClaimDetailsPage() {
                 <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Service Date</dt>
-                    <dd className="mt-1 text-white">
-                      {claim?.extractedData?.claimDetails?.serviceDate || claim?.serviceDate ?
-                        new Date(claim.extractedData?.claimDetails?.serviceDate || claim.serviceDate).toLocaleDateString() :
-                        'N/A'}
-                    </dd>
+                    <dd className="mt-1 text-white">{formatDate(claim?.extractedData?.claimDetails?.serviceDate || claim?.serviceDate)}</dd>
                   </div>
                   {claim?.extractedData?.claimDetails?.dischargeDate && (
                     <div>
                       <dt className="text-sm font-medium text-slate-400">Discharge Date</dt>
-                      <dd className="mt-1 text-white">
-                        {new Date(claim.extractedData.claimDetails.dischargeDate).toLocaleDateString()}
-                      </dd>
+                      <dd className="mt-1 text-white">{formatDate(claim.extractedData.claimDetails.dischargeDate)}</dd>
                     </div>
                   )}
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Total Amount</dt>
                     <dd className="mt-1 text-white">
-                      {claim?.extractedData?.claimDetails?.totalAmount || claim?.amount ?
-                        `${claim.extractedData?.claimDetails?.currency || 'USD'} ${(claim.extractedData?.claimDetails?.totalAmount || claim.amount).toFixed(2)}` :
-                        'N/A'}
+                      {formatCurrency(
+                        claim?.extractedData?.claimDetails?.totalAmount || claim?.amount,
+                        claim?.extractedData?.claimDetails?.currency
+                      )}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Covered Amount</dt>
                     <dd className="mt-1 text-white">
-                      {claim?.extractedData?.claimDetails?.coveredAmount ?
-                        `${claim.extractedData.claimDetails.currency || 'USD'} ${claim.extractedData.claimDetails.coveredAmount.toFixed(2)}` :
-                        'N/A'}
+                      {formatCurrency(
+                        claim?.extractedData?.claimDetails?.coveredAmount,
+                        claim?.extractedData?.claimDetails?.currency
+                      )}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Patient Responsibility</dt>
                     <dd className="mt-1 text-white">
-                      {claim?.extractedData?.claimDetails?.patientResponsibility ?
-                        `${claim.extractedData.claimDetails.currency || 'USD'} ${claim.extractedData.claimDetails.patientResponsibility.toFixed(2)}` :
-                        'N/A'}
+                      {formatCurrency(
+                        claim?.extractedData?.claimDetails?.patientResponsibility,
+                        claim?.extractedData?.claimDetails?.currency
+                      )}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Claim Type</dt>
-                    <dd className="mt-1 text-white">{claim?.extractedData?.claimDetails?.claimType || 'N/A'}</dd>
+                    <dd className="mt-1 text-white">{formatValue(claim?.extractedData?.claimDetails?.claimType)}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Diagnosis Codes</dt>
                     <dd className="mt-1 text-white">
-                      {claim?.extractedData?.claimDetails?.diagnosisCodes?.length ?
-                        claim.extractedData.claimDetails.diagnosisCodes.join(', ') :
-                        'N/A'}
+                      {formatValue(
+                        claim?.extractedData?.claimDetails?.diagnosisCodes,
+                        (codes) => codes?.length ? codes.join(', ') : 'N/A'
+                      )}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-slate-400">Procedure Codes</dt>
                     <dd className="mt-1 text-white">
-                      {claim?.extractedData?.claimDetails?.procedureCodes?.length ?
-                        claim.extractedData.claimDetails.procedureCodes.join(', ') :
-                        'N/A'}
+                      {formatValue(
+                        claim?.extractedData?.claimDetails?.procedureCodes,
+                        (codes) => codes?.length ? codes.join(', ') : 'N/A'
+                      )}
                     </dd>
                   </div>
                 </dl>
@@ -313,24 +311,24 @@ export default function ClaimDetailsPage() {
                   <div className="space-y-4">
                     {claim.extractedMedicalEntities.map((entity, index) => (
                       <div key={index} className="bg-slate-800/50 p-4 rounded-lg">
-                        <h4 className="text-lg font-semibold text-white mb-2">{entity.type}</h4>
+                        <h4 className="text-lg font-semibold text-white mb-2">{formatValue(entity.type)}</h4>
                         <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <dt className="text-sm font-medium text-slate-400">Value</dt>
-                            <dd className="mt-1 text-white">{entity.value || 'N/A'}</dd>
+                            <dd className="mt-1 text-white">{formatValue(entity.value)}</dd>
                           </div>
                           {entity.confidence && (
                             <div>
                               <dt className="text-sm font-medium text-slate-400">Confidence</dt>
                               <dd className="mt-1 text-white">
-                                {(entity.confidence * 100).toFixed(1)}%
+                                {formatValue(entity.confidence, (val) => `${(val * 100).toFixed(1)}%`)}
                               </dd>
                             </div>
                           )}
                           {entity.context && (
                             <div className="col-span-2">
                               <dt className="text-sm font-medium text-slate-400">Context</dt>
-                              <dd className="mt-1 text-white">{entity.context}</dd>
+                              <dd className="mt-1 text-white">{formatValue(entity.context)}</dd>
                             </div>
                           )}
                         </dl>
