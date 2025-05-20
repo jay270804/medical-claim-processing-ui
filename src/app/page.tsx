@@ -121,7 +121,7 @@ export default function LandingPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-      >
+        >
         <span className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} Medical Claims Processing UI. All rights reserved.</span>
         <span className="text-slate-600 text-xs mt-1">Built with <span className="text-[#2f7ff2] font-semibold">Next.js</span> &amp; <span className="text-[#2f7ff2] font-semibold">shadcn/ui</span></span>
       </motion.footer>
