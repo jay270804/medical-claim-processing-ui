@@ -97,11 +97,11 @@ export interface Claim {
   status: string; // e.g., APPROVED, PROCESSING, REJECTED
   createdAt: string;
   updatedAt: string;
-  patientName: string;
-  providerName: string;
-  serviceDate: string;
-  amount: number;
-  claimType: string; // e.g., OUTPATIENT, CONSULTATION
+  summary: {
+    patientName: string;
+    amount: number;
+    serviceDate: string;
+  };
 }
 
 export interface PaginationInfo {
@@ -158,6 +158,24 @@ interface MedicalEntity {
   context?: string;
 }
 
+export interface ExtractedLine {
+  key: string;
+  value: string;
+  confidence: number;
+}
+
+export interface ExtractedData {
+  lines: ExtractedLine[];
+  metadata: {
+    processedAt: string;
+    totalLines: number;
+    processedLines: number;
+    batchSize: number;
+    filteredLines: number;
+    confidenceThreshold: number;
+  };
+}
+
 export interface DetailedClaim {
   id: string;
   documentId: string;
@@ -170,30 +188,7 @@ export interface DetailedClaim {
   serviceDate: string;
   patientName: string;
   providerName: string;
-  extractedData: {
-    patientInfo: {
-      name: string;
-      dob?: string;
-      gender?: string;
-      insuranceId?: string;
-    };
-    providerInfo: {
-      name: string;
-      address?: string;
-      providerNumber: string;
-    };
-    claimDetails: {
-      serviceDate: string;
-      dischargeDate?: string;
-      totalAmount: number;
-      coveredAmount?: number;
-      patientResponsibility?: number;
-      currency?: string;
-      claimType?: string;
-      diagnosisCodes?: string[];
-      procedureCodes?: string[];
-    };
-  };
+  extractedData: ExtractedData;
   extractedMedicalEntities?: MedicalEntity[];
   documents?: {
     id: string;

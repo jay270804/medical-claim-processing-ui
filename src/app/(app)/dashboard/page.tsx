@@ -10,7 +10,6 @@ import {
   Clock,
   ChevronDown,
   Eye,
-  ArrowUpDown,
   ChevronLeft,
   ChevronRight,
   Inbox,
@@ -63,8 +62,6 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [statusFilter, setStatusFilter] = useState<string>('');
-  const [sortBy, setSortBy] = useState<string>('createdAt');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   const fetchClaims = async () => {
     setIsLoading(true);
@@ -72,8 +69,6 @@ export default function DashboardPage() {
       const params: GetAllClaimsParams = {
         page: currentPage,
         limit: ITEMS_PER_PAGE,
-        sortBy,
-        sortDirection,
         ...(statusFilter && statusFilter !== 'ALL' && { status: statusFilter }),
       };
 
@@ -94,28 +89,11 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchClaims();
-  }, [currentPage, statusFilter, sortBy, sortDirection]);
-
-  const handleSort = (column: string) => {
-    if (sortBy === column) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(column);
-      setSortDirection('asc');
-    }
-  };
+  }, [currentPage, statusFilter]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
-
 
   return (
     <div className="space-y-6">
@@ -171,48 +149,9 @@ export default function DashboardPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="hover:bg-slate-800/50">
-                    <TableHead className="text-slate-400">Claim ID</TableHead>
                     <TableHead className="text-slate-400">Status</TableHead>
-                    <TableHead className="text-slate-400">
-                      <Button
-                        variant="ghost"
-                        className="text-slate-400 hover:text-white"
-                        onClick={() => handleSort('patientName')}
-                      >
-                        Patient
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
-                    <TableHead className="text-slate-400">
-                      <Button
-                        variant="ghost"
-                        className="text-slate-400 hover:text-white"
-                        onClick={() => handleSort('providerName')}
-                      >
-                        Provider
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
-                    <TableHead className="text-slate-400">
-                      <Button
-                        variant="ghost"
-                        className="text-slate-400 hover:text-white"
-                        onClick={() => handleSort('serviceDate')}
-                      >
-                        Service Date
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
-                    <TableHead className="text-slate-400">
-                      <Button
-                        variant="ghost"
-                        className="text-slate-400 hover:text-white"
-                        onClick={() => handleSort('amount')}
-                      >
-                        Amount
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </TableHead>
+                    <TableHead className="text-slate-400">Patient</TableHead>
+                    <TableHead className="text-slate-400">Service Date</TableHead>
                     <TableHead className="text-slate-400">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -221,7 +160,6 @@ export default function DashboardPage() {
                     const StatusIcon = STATUS_ICONS[claim.status as keyof typeof STATUS_ICONS] || Clock;
                     return (
                       <TableRow key={claim.id} className="hover:bg-slate-800/50">
-                        <TableCell className="text-white">{claim.id}</TableCell>
                         <TableCell>
                           <Badge
                             variant="outline"
@@ -231,10 +169,8 @@ export default function DashboardPage() {
                             {claim.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-white">{claim.patientName}</TableCell>
-                        <TableCell className="text-white">{claim.providerName}</TableCell>
-                        <TableCell className="text-white">{formatDate(claim.serviceDate)}</TableCell>
-                        <TableCell className="text-white">{formatCurrency(claim.amount)}</TableCell>
+                        <TableCell className="text-white">{claim.summary.patientName}</TableCell>
+                        <TableCell className="text-white">{formatDate(claim.summary.serviceDate)}</TableCell>
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
