@@ -9,15 +9,40 @@ A modern, dark-themed web application for secure, fast, and user-friendly medica
 ## Features
 
 - 🌑 **Dark Mode Only:** Elegant, accessible, and visually consistent dark UI
-- 🏥 **Medical Claims Dashboard:** View, filter, and manage all your claims in one place
+- 🏥 **Medical Claims Dashboard:** Simplified view of claims with status, patient info, and service dates
 - 📄 **Document Upload & Processing:** Upload medical documents, track processing status, and view extracted data
-- 🧑‍⚕️ **Patient & Provider Info:** Structured, easy-to-read claim details
+- 🧑‍⚕️ **Enhanced Data Extraction:**
+  - Confidence-based grouping of extracted data
+  - Clear categorization of medical information
+  - Improved accuracy with confidence scoring
 - 🔒 **Authentication:** Secure login and registration with JWT-based auth
 - ⚡ **Fast & Responsive:** Built with Next.js App Router, shadcn/ui, and Tailwind CSS for a snappy experience
 - 🪝 **Global State:** Uses Zustand for authentication and shared UI state
 - 🧩 **Reusable Components:** Modular, atomic UI with shadcn/ui and custom components
 - 🛡️ **Error & Loading States:** Universal skeletons, spinners, and alerts for robust UX
 - 🎬 **Animated Landing Page:** Framer Motion and Tailwind animations for a polished first impression
+
+---
+
+## Recent Updates
+
+### API Contract Migration (Latest)
+- **Enhanced Data Extraction:**
+  - New line-by-line extraction with confidence scoring
+  - Improved handling of key-value pairs
+  - Better amount classification and date formatting
+  - Metadata tracking for processing statistics
+
+- **Dashboard Improvements:**
+  - Simplified claims list with essential information
+  - Focus on patient name and service date
+  - Status-based filtering
+  - Pagination for better performance
+
+- **Document Preview:**
+  - Clear messaging for PDF documents
+  - Direct download option for all document types
+  - Improved image preview support
 
 ---
 
